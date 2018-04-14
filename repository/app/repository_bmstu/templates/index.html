@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    {% if authorized %}
+        <div id="mar-down" class="container">
+               <div class="row">
+                   <div  class="col-md-12">
+                       <div id="text-rep" class="page-header">
+                           <h1>Для просмотра содержимого, необходимо войти в систему.</h1>
+                       </div>
+                   </div>
+               </div>
+        </div>
+    {% else %}
+    <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="text-rep" class="page-header">
+                <h1>Научный репозиторий кафедры <a href="http://iu5.bmstu.ru/"> ИУ5 "Системы обработки информации и управления"</a></h1>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+    <div class="row">
+        <div class="col-md-10 ">
+            <div id="search" class="input-group input-group-lg">
+                <input id="text-search" type="text" class="form-control" placeholder="Введите запрос">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary">Найти</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+    <div id="ex" class="row">
+        <div class="col-md-10">
+            <p>Например: <a href="#">средства АСОИУ</a>, <a href="#">дискретная математика</a>...</p>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+    <div id="sec" class="row">
+        <div class="col-md-6">
+            <h1>Доступные разделы</h1>
+            <div id="pop" class="row">
+                <div class="col-md-12 brd">
+                    <p> <a href="#">Информационная безопасность </a></p>
+                    <p> <a href="#">Мобильные сети</a></p>
+                    <p> <a href="#">Средства АСОИУ</a></p>
+                    <p>. . .</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h1>Закрытые разделы</h1>
+            <div id="pop" class="row">
+                <div class="col-md-12 brd">
+                    <p> <a href="#">Супер ЭВМ</a><button id="btn_acces" type="submit" class="btn btn-primary">Запросить доступ</button></p>
+                    <p> <a href="#">Дискретная математика</a><button id="btn_acces" type="submit" class="btn btn-primary">Запросить доступ</button></p>
+                    <p> <a href="#">Физика</a><button id="btn_acces" type="submit" class="btn btn-primary">Запросить доступ</button></p>
+                    <p>. . .</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    {% endif %}
+{% endblock %}
