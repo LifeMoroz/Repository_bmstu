@@ -40,11 +40,12 @@
             <div id="pop" class="row">
                 <div class="col-md-12 brd">
                     {% for ct in public %}
-                    <p> <a href="#">{{ ct }}</a></p>
+                    <p><a href="#" style="color: black">{{ ct }}</a>{% if ct in can_delete %} <a href="{% url 'library:remove' ct.id %}">del</a>{% endif %}</p>
                     {% endfor %}
                 </div>
             </div>
         </div>
+    {% if private %}
         <div class="col-md-6">
             <h1>Закрытые разделы</h1>
             <div id="pop" class="row">
@@ -67,6 +68,7 @@
                 </div>
             </div>
         </div>
+    {% endif %}
     </div>
     </div>
 {% endblock %}

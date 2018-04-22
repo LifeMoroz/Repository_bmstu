@@ -29,3 +29,10 @@ class CategoryList(TemplateView):
         return {
             'object_list': self.get_queryset(self.queryset),
         }
+
+
+class CategoryRemove(View):
+    def get(self, request, ct_id):
+        if request.user.is_authenticated:
+            Category.objects.filter(id=ct_id).delete()
+        return redirect('index:main')

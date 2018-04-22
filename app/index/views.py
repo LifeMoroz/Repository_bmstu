@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -29,8 +30,14 @@ class MainPage(TemplateView):
     def get_context_data(self, **kwargs):
         free_catalogs = Category.objects.filter(access=Access.PUBLIC)
         private_catalogs = Category.objects.filter(access=Access.PRIVATE)
+        if self.request.user.groups.filter(name='Читатели').exists():
+            return {
+                'public': free_catalogs,
+                'private': private_catalogs,
+                'granted': Category.objects.filter(usercategory__granted=True, usercategory__user=self.request.user)
+            }
+        edit_all = self.request.user.groups.filter(Q(name='Администраторы')|Q(name='Редакторы')).exists()
         return {
-            'public': free_catalogs,
-            'private': private_catalogs,
-            'granted': Category.objects.filter(usercategory__granted=True, usercategory__user=self.request.user)
+            'public': Category.objects.all(),
+            'can_delete': Category.objects.all() if edit_all else self.request.user.categories.all()
         }
