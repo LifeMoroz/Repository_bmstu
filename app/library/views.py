@@ -12,7 +12,6 @@ class GainAccess(View):
         return redirect('index:main')
 
 
-
 class CategoryList(TemplateView):
     template_name = 'category_list.html'
     queryset = Category.objects.all()
