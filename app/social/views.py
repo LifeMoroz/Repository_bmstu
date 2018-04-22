@@ -86,7 +86,7 @@ class UserList(TemplateView):
             queryset = queryset.filter(Q(first_name__contains=query)|Q(last_name__contains=query))
         group_id = self.request.GET.get('group_id')
         if group_id:
-            queryset = queryset.filter(groups__id=group_id)
+            queryset = queryset.filter(groups__id__gte=group_id)
         return queryset
 
     def get_context_data(self, **kwargs):
