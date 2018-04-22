@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+ <div class="container">
+    <div class="row">
+        <div class="col-md-10 ">
+            <form action="{% url 'social:users_list' %}" method="get">
+            <div id="search" class="input-group input-group-lg">
+                <input id="text-search" type="text" class="form-control" name="q" placeholder="Введите запрос">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary">Найти</button>
+                </span>
+            </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+    <div id="ex" class="row">
+        <div class="col-md-6">
+            <h2><b>Список пользователей</b></h2>
+            {% if not object_list %}
+                <br>
+                По вашим критериям нет ни одного пользователя
+            {% endif %}
+            {% for user in object_list %}
+            <p><a href="#">{{ user }}</a></p>
+            {% endfor %}
+        </div>
+         <div class="col-md-6">
+            <h2>Группы пользователей</h2>
+            {% for group in groups %}
+            <p><a href="{% url 'social:users_list' %}?group_id={{ group.id }}">{{ group }}</a></p>
+            {% endfor %}
+         </div>
+    </div>
+    </div>
+{% endblock %}

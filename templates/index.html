@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load library_extra %}
+
+{% block content %}
+    <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="text-rep" class="page-header">
+                <h1>Научный репозиторий кафедры <a href="http://iu5.bmstu.ru/"> ИУ5 "Системы обработки информации и управления"</a></h1>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+    <div class="row">
+        <div class="col-md-10 ">
+            <form action="{% url 'library:categories_list' %}" method="get">
+                <div id="search" class="input-group input-group-lg">
+                    <input id="text-search" type="text" class="form-control" placeholder="Введите запрос" name="q">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-primary">Найти</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+    <div id="ex" class="row">
+        <div class="col-md-10">
+            <p>Например: <a href="#">средства АСОИУ</a>, <a href="#">дискретная математика</a>...</p>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+    <div id="sec" class="row">
+        <div class="col-md-6">
+            <h1>Доступные разделы</h1>
+            <div id="pop" class="row">
+                <div class="col-md-12 brd">
+                    {% for ct in public %}
+                    <p> <a href="#">{{ ct }}</a></p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h1>Закрытые разделы</h1>
+            <div id="pop" class="row">
+                <div class="col-md-12 brd">
+                    {% for ct in private %}
+                    <p>
+                        {% if ct in granted %}
+                        <p> <a href="#">{{ ct }}</a></p>
+                        {% elif ct in request.user.categories.all %}
+                        {{ ct }}
+                        <i>(Запрос на доступ ожидает модерацию)</i>
+                        {% else %}
+                        <a href="{% url 'library:gain_access' ct.id %}">
+                        {{ ct }}
+                            <button id="btn_acces" type="submit" class="btn btn-primary">Запросить доступ</button>
+                        </a>
+                        {% endif %}
+                    </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <form class="form-horizontal" role="form" action="{% url 'social:signin' %}" method="post">
+                <h1 id="enter" class="form-signin-heading">Вход</h1>
+                <br />
+                {{ form.non_field_errors }}
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    {{ field.errors }}
+                    <label class="control-label col-xs-3" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    <div class="col-xs-9">
+                        {{ field }}
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input id="btn-enter" type="submit" class="btn btn-lg btn-primary btn-block" value="Войти">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+{% endblock %}
