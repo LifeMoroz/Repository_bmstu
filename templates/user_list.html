@@ -25,7 +25,7 @@
                 По вашим критериям нет ни одного пользователя
             {% endif %}
             {% for user in object_list %}
-            <p><a href="#">{{ user }}</a></p>
+            <p><a href="{% url 'social:user' user.id %}">{{ user }}</a></p>
             {% endfor %}
         </div>
          <div class="col-md-6">

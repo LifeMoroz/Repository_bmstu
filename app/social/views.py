@@ -3,7 +3,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import Group
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.db.models import Q
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.views import View
 from django.views.generic import TemplateView
 
@@ -78,7 +78,8 @@ class My(TemplateView):
         form = MyForm(instance=self.request.user)
         return {
             'form': form,
-            'editable': False
+            'editable': False,
+            'my': True
         }
 
 
@@ -118,4 +119,16 @@ class UserList(TemplateView):
         return {
             'object_list': self.get_queryset(self.queryset),
             'groups': Group.objects.all()
+        }
+
+
+class UserView(TemplateView):
+    template_name = 'settings.html'
+
+    def get_context_data(self, **kwargs):
+        user = get_object_or_404(User, id=kwargs.get('user_id'))
+        form = MyForm(instance=user)
+        return {
+            'form': form,
+            'editable': False
         }
