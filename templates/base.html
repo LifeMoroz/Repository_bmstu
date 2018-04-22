@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge" /><![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block bootstrap3_title %}django-bootstrap3 template title{% endblock %}</title>
+    <title>{% block bootstrap3_title %}Научный репозиторий ИУ5{% endblock %}</title>
     {% bootstrap_css %}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -48,8 +48,8 @@
                     <img id="nav-avatar" style="margin-right: 10px" height="40" width="40" class="float-left" src={% static 'media/image/no_avatar.png'%}>
                     <a href="{% url 'social:my' %}" class="user-name">{{ request.user.first_name }} {{ request.user.last_name }}</a>
                     <div class="user_menu">
-                        <a href="{% url 'social:my' %}" class="settings">Настройки</a>&nbsp;&nbsp;&nbsp;
-                        <a href="{% url 'social:logout' %}" class="logout">Выход</a>
+                        <a href="{% url 'social:settings' %}" class="settings">Настройки</a>&nbsp;&nbsp;&nbsp;
+                        <a href="{% url 'social:signout' %}" class="logout">Выход</a>
                     </div>
                 {% endif %}
             </div>

@@ -3,10 +3,14 @@ from django.db import models
 from django.db.models import Q
 
 from app.library.constants import Access
+from app.social.constants import Position
 
 
 class User(AbstractUser):
     gender = models.BooleanField('Пол', choices=((0, 'Женский'), (1, 'Мужской')))
+
+    POSITION_CHOICES = ((Position.STUDENT, 'Студент'), (Position.TEACHER, 'Преподаватель'), (Position.PHD_STUDENT, 'Аспирант'))
+    position = models.IntegerField('Должность', choices=POSITION_CHOICES)
 
     class Meta:
         verbose_name = 'Пользователь'

@@ -27,12 +27,17 @@ class SignUpForm(UserCreationForm):
     )
     gender = forms.ChoiceField(
         label='Пол',
-        widget=forms.RadioSelect(), choices=((0, 'Женский'), (1, 'Мужской'))
+        widget=forms.RadioSelect(), choices=((False, 'Женский'), (True, 'Мужской'))
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if kwargs.get('instance'):
+            self.fields['gender'].initial = kwargs['instance'].gender
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'password1', 'password2', 'gender')
+        fields = ('first_name', 'last_name', 'position', 'email', 'password1', 'password2', 'gender')
 
 
 class SignInForm(forms.ModelForm):
@@ -48,3 +53,41 @@ class SignInForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('email', 'password')
+
+
+class SettingsForm(SignUpForm):
+    id = forms.IntegerField(widget=forms.HiddenInput())
+    old_password = forms.CharField(
+        label='Старый пароль',
+        widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': 'Введите пароль'}),
+        initial='',
+    )
+    password1 = forms.CharField(
+        label='Новый пароль',
+        widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': 'Введите пароль'}),
+        required=False,
+    )
+    password2 = forms.CharField(
+        label='Повторите пароль',
+        widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': 'Введите пароль ещё раз'}),
+        required=False,
+    )
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'position', 'email', 'gender', 'old_password', 'password1', 'password2', 'id')
+
+
+class MyForm(SettingsForm):
+    old_password = None
+    password1 = None
+    password2 = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self:
+            field.field.disabled = True
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'position', 'email', 'gender', 'id')

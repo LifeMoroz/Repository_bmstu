@@ -7,11 +7,11 @@ from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import TemplateView
 
-from app.social.forms import SignUpForm, SignInForm
+from app.social.forms import SignUpForm, SignInForm, SettingsForm, MyForm
 from app.social.models import User
 
 
-class LogoutView(View):
+class SignOut(View):
     def get(self, request, *args, **kwargs):
         logout(request)
         return redirect('index:main')
@@ -71,9 +71,34 @@ class SignIn(TemplateView):
         return self.render_to_response({'form': form})
 
 
-class My(View):
-    def get(self, request):
-        return super().render(request, 'page.html', {})
+class My(TemplateView):
+    template_name = 'settings.html'
+
+    def get_context_data(self, **kwargs):
+        form = MyForm(instance=self.request.user)
+        return {
+            'form': form,
+            'editable': False
+        }
+
+
+class MySettings(TemplateView):
+    template_name = 'settings.html'
+
+    def get_context_data(self, **kwargs):
+        return {
+            'form': SettingsForm(instance=self.request.user),
+            'editable': True
+        }
+
+    def post(self, request, *args, **kwargs):
+        form = SettingsForm(data=request.POST, instance=request.user)
+        if not form.is_valid():
+            return self.render_to_response({'form': form})
+
+        if not check_password(form.cleaned_data['old_password'], request.user.password):
+            form.add_error(NON_FIELD_ERRORS, 'Старый пароль не верен')
+            return self.render_to_response({'form': form})
 
 
 class UserList(TemplateView):
