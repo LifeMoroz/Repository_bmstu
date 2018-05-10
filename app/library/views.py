@@ -1,7 +1,9 @@
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 
+from app.library.forms import CategoryForm
 from app.library.models import UserCategory, Category
 
 
@@ -36,3 +38,27 @@ class CategoryRemove(View):
         if request.user.is_authenticated:
             Category.objects.filter(id=ct_id).delete()
         return redirect('index:main')
+
+
+class CategoryAdd(TemplateView):
+    template_name = 'form.html'
+
+    def get_context_data(self, **kwargs):
+        return {
+            'form': kwargs.get('form') or CategoryForm(),
+            'title': 'Добавить раздел',
+            'action': reverse('library:add_category')
+        }
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('social:signin')
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request):
+        form = CategoryForm(data=request.POST)
+        if form.is_valid():
+            obj = form.save(False)
+            obj.a
+            return redirect(reverse('library:add_category') + "?success=1")
+        return self.render_to_response(self.get_context_data(form=form))

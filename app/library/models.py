@@ -8,7 +8,8 @@ class Category(models.Model):
     title = models.CharField(verbose_name='Название', max_length=255)
     ACCESS_CHOICES = ((Access.PRIVATE, 'Приватный'), (Access.PUBLIC, 'Публичный'))
     access = models.IntegerField(verbose_name='Уровень доступа', choices=ACCESS_CHOICES)
-    users = models.ManyToManyField('social.User', through='UserCategory', related_name='categories')
+    users = models.ManyToManyField('social.User', through='UserCategory', related_name='accessed_categories')
+    author = models.ForeignKey('social.User', models.CASCADE, verbose_name='Автор', related_name='categories')
 
     def __str__(self):
         return self.title

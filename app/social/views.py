@@ -1,9 +1,10 @@
 from django.contrib.auth import logout, login
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import Group
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.db.models import Q
 from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 
@@ -18,10 +19,15 @@ class SignOut(View):
 
 
 class SignUp(TemplateView):
-    template_name = 'signup.html'
+    template_name = 'form.html'
 
     def get_context_data(self, **kwargs):
-        return {'form': SignUpForm()}
+        return {
+            'form': kwargs.get('form') or SignUpForm(),
+            'title': 'Регистрация',
+            'action': reverse('social:signup'),
+            'reset': True
+        }
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -37,14 +43,14 @@ class SignUp(TemplateView):
             user.groups.add(Group.objects.get(name='Читатели'))
             login(request, user)
             return redirect('index:main')
-        return self.render_to_response({'form': form})
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class SignIn(TemplateView):
-    template_name = 'signin.html'
+    template_name = 'form.html'
 
     def get_context_data(self, **kwargs):
-        return {'form': SignInForm()}
+        return {'form': kwargs.get('form') or SignInForm(), 'title': 'Войти', 'action': reverse('social:signin')}
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -61,14 +67,13 @@ class SignIn(TemplateView):
             except User.DoesNotExist:
                 user = None
 
-            if not user or not check_password(password, user.password):
-                form.add_error(NON_FIELD_ERRORS, 'Ошибка авторизации')
-                return self.render_to_response({'form': form})
+            if user and check_password(password, user.password):
+                login(request, user)
+                return redirect('index:main')
 
-            login(request, user)
-            return redirect('index:main')
+            form.add_error(NON_FIELD_ERRORS, 'Ошибка авторизации')
 
-        return self.render_to_response({'form': form})
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class My(TemplateView):
@@ -119,9 +124,16 @@ class UserList(TemplateView):
         return queryset
 
     def get_context_data(self, **kwargs):
+        group = None
+        if self.request.GET.get('group_id'):
+            try:
+                group = Group.objects.get(id=self.request.GET.get('group_id'))
+            except Group.DoesNotExist:
+                pass
         return {
             'object_list': self.get_queryset(self.queryset),
-            'groups': Group.objects.all()
+            'groups': Group.objects.all(),
+            'group': group,
         }
 
 
@@ -132,6 +144,7 @@ class UserView(TemplateView):
         user = get_object_or_404(User, id=kwargs.get('user_id'))
         form = MyForm(instance=user)
         return {
+            'user': user,
             'form': form,
             'editable': False
         }

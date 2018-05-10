@@ -22,6 +22,10 @@ class User(AbstractUser):
     def has_access(self, category):
         if category.access == Access.PUBLIC:
             return True
-        if self.groups.filter(Q(name='Администраторы') | Q(name='Редакторы') ):
+        if self.groups.filter(Q(name='Администраторы') | Q(name='Редакторы')):
             return True
         return self.categories.filter(id=category.id, granted=True).exists()
+
+    @property
+    def can_create(self):
+        return self.groups.filter(Q(name='Администраторы') | Q(name='Редакторы')).exists()

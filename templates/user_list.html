@@ -18,22 +18,41 @@
     </div>
     <div class="container">
     <div id="ex" class="row">
-        <div class="col-md-6">
-            <h2><b>Список пользователей</b></h2>
-            {% if not object_list %}
-                <br>
-                По вашим критериям нет ни одного пользователя
-            {% endif %}
-            {% for user in object_list %}
-            <p><a href="{% url 'social:user' user.id %}">{{ user }}</a></p>
-            {% endfor %}
+        <div class="col-3">
+           <h2>Группы пользователей</h2>
+           {% for group in groups %}
+           <p><a href="{% url 'social:users_list' %}?group_id={{ group.id }}">{{ group }}</a></p>
+           {% endfor %}
+           <p><a href="{% url 'social:users_list' %}">Все пользователи</a></p>
         </div>
-         <div class="col-md-6">
-            <h2>Группы пользователей</h2>
-            {% for group in groups %}
-            <p><a href="{% url 'social:users_list' %}?group_id={{ group.id }}">{{ group }}</a></p>
-            {% endfor %}
-         </div>
+        <div class="col-3">
+        <h2><b>Список пользователей</b></h2>
+        {% if not object_list %}
+            <br>
+            По вашим критериям нет ни одного пользователя
+        {% endif %}
+        {% for user in object_list %}
+        <p><a href="{% url 'social:user' user.id %}">{{ user }}</a></p>
+        {% endfor %}
+        </div>
+        {% if request.GET.group_id %}
+        <div class="col-4">
+            <h2>Права группы пользователей</h2>
+            <ul>
+            {% if group.name == 'Администраторы' %}
+                <li>Все права</li>
+            {% elif group.name == 'Редакторы' %}
+                <li>Выдача прав на каталоги</li>
+                <li>Создание каталогов</li>
+            {% elif group.name == 'Научные работники' %}
+                <li>Редактирование своих каталогов</li>
+                <li>Создание каталогов</li>
+            {% elif group.name == 'Читатели' %}
+                <li>Только чтение</li>
+            {% endif %}
+            </ul>
+        </div>
+        {% endif %}
     </div>
     </div>
 {% endblock %}
