@@ -40,7 +40,7 @@
             <div id="pop" class="row">
                 <div class="col-md-12 brd">
                     {% for ct in public %}
-                    <p>{{ ct }}{% if ct in can_delete and ct.author != request.user %} <a href="{% url 'library:remove' ct.id %}">del</a>{% endif %}</p>
+                    <p>{{ ct }}{% if ct in can_delete %} <a href="{% url 'library:remove' ct.id %}">del</a>{% endif %}</p>
                     {% endfor %}
                 </div>
             </div>

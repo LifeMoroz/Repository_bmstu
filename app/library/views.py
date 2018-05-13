@@ -59,6 +59,7 @@ class CategoryAdd(TemplateView):
         form = CategoryForm(data=request.POST)
         if form.is_valid():
             obj = form.save(False)
-            obj.a
+            obj.author = request.user
+            obj.save()
             return redirect(reverse('library:add_category') + "?success=1")
         return self.render_to_response(self.get_context_data(form=form))
