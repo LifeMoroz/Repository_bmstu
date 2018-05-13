@@ -20,10 +20,10 @@
     <div id="ex" class="row">
         <div class="col-3">
            <h2>Группы пользователей</h2>
+           <p><a href="{% url 'social:users_list' %}"{% if not request.GET.group_id %} style="text-decoration: underline">{% endif %}>Все пользователи</a></p>
            {% for group in groups %}
-           <p><a href="{% url 'social:users_list' %}?group_id={{ group.id }}">{{ group }}</a></p>
+           <p><a href="{% url 'social:users_list' %}?group_id={{ group.id }}"{% if request.GET.group_id == group.id|slugify %} style="text-decoration: underline">{% endif %}>{{ group }}</a></p>
            {% endfor %}
-           <p><a href="{% url 'social:users_list' %}">Все пользователи</a></p>
         </div>
         <div class="col-3">
         <h2><b>Список пользователей</b></h2>
