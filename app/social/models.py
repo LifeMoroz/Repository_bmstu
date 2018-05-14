@@ -28,4 +28,4 @@ class User(AbstractUser):
 
     @property
     def can_create(self):
-        return self.groups.filter(Q(name='Администраторы') | Q(name='Редакторы')).exists()
+        return self.groups.filter(Q(name='Администраторы') | Q(name='Редакторы') | Q(name='Научные работники')).exists()

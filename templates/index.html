@@ -52,15 +52,15 @@
                 <div class="col-md-12 brd">
                     {% for ct in private %}
                     <p>
-                        {% if ct in granted %}
+                        {% if ct in granted or ct in request.user.categories %}
                         <p>{{ ct }}</p>
-                        {% elif ct in request.user.categories.all %}
+                        {% elif ct in request.user.accessed_categories.all %}
                         {{ ct }}
                         <i>(Запрос на доступ ожидает модерацию)</i>
                         {% else %}
                         <a href="{% url 'library:gain_access' ct.id %}">
                         {{ ct }}
-                            <button id="btn_acces" type="submit" class="btn btn-primary">Запросить доступ</button>
+                            <button id="btn_acces"  class="btn btn-primary">Запросить доступ</button>
                         </a>
                         {% endif %}
                     </p>
